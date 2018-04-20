@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>To Do List</title>
+    <link rel="stylesheet" href="./jquery-ui.css">
+    <script src="./jquery.js"></script>
+    <script src="./jquery-ui.js"></script>
+    <style>
+        #container {
+            width: 700px;
+            height: 450px;
+            margin: 40px auto;
+            border: 2px solid rgb(226, 215, 215);
+        }
+
+        h2 {
+            color: rgb(34, 12, 12);
+            text-align: center;
+        }
+
+        #projects {
+            width: 650px;
+            margin: 0px auto;
+        }
+
+        ol li {
+            border: 1px dotted black;
+            cursor: pointer;
+            padding: 5px;
+            margin-bottom: 5px;
+        }
+
+        ol li:hover {
+            background: rgb(226, 215, 215);
+        }
+
+        #btnAddProject {
+            margin-left: 535px;
+            margin-bottom: 20px;
+        }
+
+        #btnAddTask {
+            float: right;
+            margin-bottom: 20px;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            // define tabs widget
+            $("#projects").tabs();
+            //make tabs moveable
+            $("ul").sortable({
+                axis: "x",
+                containment: "#projects"
+            });
+            // make list moveable
+            $("ol").sortable({
+                axis: "",
+                containment: "#projects"
+            });
+            //define button to add projets
+            $("#btnAddProject").button()
+                .click(function () {
+                    //showing popup to add project
+                    $("#project-dialog").dialog({
+                        width: 400,
+                        resizeable: false,
+                        modal: true,
+                        buttons: {
+                            //define add button
+                            "Add new project": function () {
+                                var projectName = $("#new-project").val();
+                                //adding projects to tabs
+                                $("<li><a href='#" + projectName + "'>" + projectName +
+                                        "</a></li>")
+                                    .appendTo("#main");
+                                //making list of projects
+                                $("<ol id='" + projectName + "'></ol>").appendTo("#projects");
+                                var tabCount = $("#projets .ui-tabs-nav li").length;
+                                $("#projects").tabs("refresh");
+                                //activing made project tab
+                                $("#projects").tabs("option", "active", tabCount - 1);
+                                $("#new-project").val("");
+                                $(this).dialog("close")
+                            },
+                            //define close button
+                            "Cancel": function () {
+                                $("#new-project").val("");
+                                $(this).dialog("close")
+                            }
+                        }
+                    });
+                });
+        });
+    </script>
+</head>
+
+<body>
+    <div id="container">
+        <h2>To Do List</h2>
+        <button id="btnAddProject">Add Project</button>
+        <div id="projects">
+            <ul id="main">
+                <li>
+                    <a href="#personal">Personal</a>
+                </li>
+                <li>
+                    <a href="#work">Work</a>
+                </li>
+            </ul>
+            <ol id="personal">
+                <li>
+                    <input type="checkbox" name="" id="">Doctor Appoiment</li>
+                <li>
+                    <input type="checkbox" name="" id="">Call the Plumber</li>
+            </ol>
+            <ol id="work">
+                <li>
+                    <input type="checkbox" name="" id="">Complete test case</li>
+                <li>
+                    <input type="checkbox" name="" id="">Meet the Plumber</li>
+                <li>
+                    <input type="checkbox" name="" id="">call the Plumber</li>
+            </ol>
+        </div>
+        <div id="project-dialog" title="Add a Project" style="display: none;">
+            <label for="new-project">Project Name:</label>
+            <input type="text" id="new-project">
+        </div>
+    </div>
+
+</body>
+
+</html>
