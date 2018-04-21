@@ -95,6 +95,39 @@
                         }
                     });
                 });
+            //define button to add task
+            $("#btnAddTask").button().click(function () {
+                $("#task-dialog").dialog({
+                    width: 350,
+                    resizable: false,
+                    buttons: {
+                        "Add new Task": function () {
+                            var taskName = $('#new-task').val();
+                            // we get the tab tab of the active tab
+                            var tabActiveIndex = $("#projects").tabs("option", "active");
+                            // we get the id of the active tab
+                            var idTabActive = $("#projects> ul> li> a").eq(tabActiveIndex).attr(
+                                "href");
+                            // we remove the id
+                            idTabActive = idTabActive.slice(1);
+                            // add to the list
+                            $("ol#" + idTabActive).append("<li><input type='checkbox'>" +
+                                taskName + " </li>");
+                            $("#new-task").val("");
+                            $(this).dialog('close');
+                        },
+                        "Cancel": function () {
+                            $("#new-task").val("");
+                            $(this).dialog('close');
+                        }
+                    }
+                });
+            });
+            $("ol li input[type=checkbox]").click(function () {
+                if (this.checked) {
+                    $(this).parent().remove();
+                }
+            });
         });
     </script>
 </head>
@@ -114,22 +147,26 @@
             </ul>
             <ol id="personal">
                 <li>
-                    <input type="checkbox" name="" id="">Doctor Appoiment</li>
+                    <input type="checkbox" name="" id="">Reading Poro</li>
                 <li>
-                    <input type="checkbox" name="" id="">Call the Plumber</li>
+                    <input type="checkbox" name="" id="">Call the Shop</li>
             </ol>
             <ol id="work">
                 <li>
-                    <input type="checkbox" name="" id="">Complete test case</li>
+                    <input type="checkbox" name="" id="">Make todo list</li>
                 <li>
-                    <input type="checkbox" name="" id="">Meet the Plumber</li>
-                <li>
-                    <input type="checkbox" name="" id="">call the Plumber</li>
+                    <input type="checkbox" name="" id="">Prayer</li>
             </ol>
         </div>
         <div id="project-dialog" title="Add a Project" style="display: none;">
             <label for="new-project">Project Name:</label>
             <input type="text" id="new-project">
+        </div>
+        <button id="btnAddTask">Add Task</button>
+
+        <div id="task-dialog" title="Add new Task" style="display: none;">
+            <label for="new-task">Task: </label>
+            <input type="text" id="new-task">
         </div>
     </div>
 
